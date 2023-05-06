@@ -5,12 +5,17 @@ class ProductManager {
     constructor(){
         this.products = [];
         this.path = "users.json"
-        const dataStr = fs.readFileSync(this.path, "utf-8");
-        const data = JSON.parse(dataStr);
-        this.products = data;
+        fs.readFile(this.path, "utf-8", (err, dataStr) => {
+            if (err) {
+                console.error(err);
+            } else {
+                const data = JSON.parse(dataStr);
+                this.products = data;
+            }
+        });
     }
     
-    addProduct = (product) => {
+    addProduct = async (product) => {
         /*
         Formato:
         -ID (Automatico incremental)
@@ -27,7 +32,7 @@ class ProductManager {
             product.id = this.#generateId()
             this.products.push(product)
             const productStr = JSON.stringify(this.products)
-            fs.writeFileSync(this.path, productStr)
+            await fs.promise.writeFileSync(this.path, productStr)
         }
         
     }
@@ -54,7 +59,7 @@ class ProductManager {
         }
     }
     
-    updateProduct(productId, product){
+    updateProduct= async (productId, product) => {
         const foundId = this.products.find(e => e.id === productId) // * Find the product with the specified id
         if(foundId){
             if(product.id){
@@ -62,18 +67,18 @@ class ProductManager {
             } else {
                 Object.assign(foundId, product);
                 const productStr = JSON.stringify(this.products)
-                fs.writeFileSync(this.path, productStr)
+                await fs.promise.writeFileSync(this.path, productStr)
             }
         } else {
             console.error("Not found"); // * If the product isn't found, print an error message
         }
     }
-    deleteProduct(id){
+    deleteProduct = async (id) => {
         const validator = this.products.find(e => e.id === id)
         const foundId = this.products.filter(product => product.id !== id);
         if(validator){
             const productStr = JSON.stringify(foundId)
-            fs.writeFileSync(this.path, productStr)
+            await fs.promise.writeFileSync(this.path, productStr)
         } else {
             console.error("EROR not found");
         }
