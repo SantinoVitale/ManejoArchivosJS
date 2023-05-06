@@ -1,11 +1,11 @@
-const fs = require("fs");
+const { promises: fsPromises } = require("fs")
 
 
 class ProductManager {
     constructor(){
         this.products = [];
         this.path = "users.json"
-        fs.readFile(this.path, "utf-8", (err, dataStr) => {
+        fsPromises.readFile(this.path, "utf-8", (err, dataStr) => {
             if (err) {
                 console.error(err);
             } else {
@@ -32,7 +32,7 @@ class ProductManager {
             product.id = this.#generateId()
             this.products.push(product)
             const productStr = JSON.stringify(this.products)
-            await fs.promise.writeFileSync(this.path, productStr)
+            await fsPromises.writeFile(this.path, productStr)
         }
         
     }
@@ -67,7 +67,7 @@ class ProductManager {
             } else {
                 Object.assign(foundId, product);
                 const productStr = JSON.stringify(this.products)
-                await fs.promise.writeFileSync(this.path, productStr)
+                await fsPromises.writeFile(this.path, productStr)
             }
         } else {
             console.error("Not found"); // * If the product isn't found, print an error message
@@ -78,9 +78,9 @@ class ProductManager {
         const foundId = this.products.filter(product => product.id !== id);
         if(validator){
             const productStr = JSON.stringify(foundId)
-            await fs.promise.writeFileSync(this.path, productStr)
+            await fsPromises.writeFile(this.path, productStr)
         } else {
-            console.error("EROR not found");
+            console.error("ERROR not found");
         }
         
         
