@@ -67,6 +67,7 @@ class ProductManager {
             } else {
                 Object.assign(foundId, product);
                 const productStr = JSON.stringify(this.products)
+                await fsPromises.writeFile(this.path, [])
                 await fsPromises.writeFile(this.path, productStr)
             }
         } else {
@@ -99,7 +100,7 @@ productManager.addProduct({title: "producto de prueba", description:"Este es un 
 console.log(productManager.getProduct()) // ! Return a array with the products
 productManager.getProductById(1) // ! Get the first product
 productManager.getProductById(5) // ! ERROR NOT FOUND
-productManager.updateProduct(1, {title: "CAMBIO"}) // ! Change the title of the first product
+productManager.updateProduct(2, {title: "CAMBIO"}) // ! Change the title of the first product
 productManager.updateProduct(1, {title: "otro titulo", id: 54}) // ! ERROR due trying to change the id
 console.log(productManager.getProduct()) // ! Get the products array´s with the first product updated
 productManager.deleteProduct(1) // ! Delete the fist
